@@ -1,1 +1,25 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.space {
+  flex: 1 1 auto;
+}
+
+.small-text {
+  font-size: 8pt;
+}
+
+.nobr {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
