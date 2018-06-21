@@ -24,7 +24,7 @@ export class ExamplesService {
   }
 
   /**
-   * Get book model by ID from DB
+   * Get EXAMPLE by ID from DB
    * @param {string} id
    * @return {Promise<ExampleModel>}
    */
@@ -37,12 +37,12 @@ export class ExamplesService {
   }
 
   /**
-   * Update/Add book to DB
-   * @param {ExampleModel} book
+   * Update/Add EXAMPLE to DB
+   * @param {ExampleModel} example
    * @return {Promise<ExampleModel>}
    */
-  public save(book: ExampleModel): Promise<ExampleModel> {
-    return this.db.update(APP_CONFIG.db.tables.examples, book)
+  public save(example: ExampleModel): Promise<ExampleModel> {
+    return this.db.update(APP_CONFIG.db.tables.examples, example)
       .then((obj) => new ExampleModel(obj))
       .catch((error) => {
         console.error('error', error);
@@ -51,12 +51,12 @@ export class ExamplesService {
   }
 
   /**
-   * Delete book from DB
-   * @param {ExampleModel} book
+   * Delete EXAMPLE from DB
+   * @param {ExampleModel} example
    * @return {Promise<any>}
    */
-  public delete(book: ExampleModel): Promise<any> {
-    return this.db.delete(APP_CONFIG.db.tables.examples, book.id)
+  public delete(example: ExampleModel): Promise<any> {
+    return this.db.delete(APP_CONFIG.db.tables.examples, example.id)
       .catch((error) => {
         console.error('error', error);
         return Promise.reject(error);
