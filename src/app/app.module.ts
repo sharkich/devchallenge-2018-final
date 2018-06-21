@@ -5,7 +5,15 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DialogLoginComponent} from './_shared/components/dialog-login/dialog-login.component';
-import {MatButtonModule, MatCardModule, MatDialogModule, MatInputModule, MatListModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule,
+  MatInputModule,
+  MatListModule,
+  MatProgressSpinnerModule,
+  MatToolbarModule
+} from '@angular/material';
 
 import {environment} from '../environments/environment';
 
@@ -47,6 +55,7 @@ import {DbService} from './_shared/services/db.service';
     MatDialogModule,
     MatButtonModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
 
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
   ],

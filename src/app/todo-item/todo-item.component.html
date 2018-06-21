@@ -7,13 +7,8 @@
       <p>{{example?.id}}</p>
     </div>
 
-    <div *ngIf="error">
-      <h1 style="color: red;">Error: {{error?.message || error}}</h1>
-    </div>
-
-    <div *ngIf="isLoading">
-      <p>Loading...</p>
-    </div>
+    <div *ngIf="error" class="error">Error: {{error?.message || error}}</div>
+    <div *ngIf="isLoading" class="loading"><p>Loading...</p><mat-spinner></mat-spinner></div>
 
   </mat-card>
 
