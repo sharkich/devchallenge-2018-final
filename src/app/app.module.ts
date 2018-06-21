@@ -20,16 +20,17 @@ import {environment} from '../environments/environment';
 import {APP_ROUTING} from './app.routing';
 
 import {AuthGuard} from './_shared/auth.guard';
+import {DbService} from './_shared/services/db.service';
 import {AuthService} from './_shared/services/auth.service';
+import {UsersService} from './_shared/services/users.service';
 import {ExamplesService} from './_shared/services/examples.service';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import {TodoListComponent} from './todo-list/todo-list.component';
 import {TodoItemComponent} from './todo-item/todo-item.component';
-import { LoginComponent } from './login/login.component';
-import {UsersService} from './_shared/services/users.service';
-import {DbService} from './_shared/services/db.service';
+import {LoadingComponent} from './_shared/components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {DbService} from './_shared/services/db.service';
     HomeComponent,
     TodoListComponent,
     TodoItemComponent,
-    LoginComponent
+    LoginComponent,
+    LoadingComponent
   ],
   imports: [
     APP_ROUTING,

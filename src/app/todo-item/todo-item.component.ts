@@ -22,18 +22,10 @@ export class TodoItemComponent extends PageController implements OnInit {
   }
 
   ngOnInit() {
-    this.isLoading = true;
     const id: string = this.activatedRoute.snapshot.params['id'];
-    this.exampleService.getById(id)
+    this.$loadingPromise = this.exampleService.getById(id)
       .then((example) => {
         this.example = example;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 5000);
-      })
-      .catch((err) => {
-        this.error = err;
-        this.isLoading = false;
       });
   }
 

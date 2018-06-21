@@ -1,6 +1,4 @@
 export class PageController {
 
-  public isLoading: boolean;
-  public error: Error;
-
+  public $loadingPromise: Promise<any>;
 }

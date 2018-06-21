@@ -25,6 +25,7 @@ import {TodoItemComponent} from './todo-item/todo-item.component';
 import {TodoListComponent} from './todo-list/todo-list.component';
 import {ExamplesService} from './_shared/services/examples.service';
 import {DialogLoginComponent} from './_shared/components/dialog-login/dialog-login.component';
+import {LoadingComponent} from './_shared/components/loading/loading.component';
 
 export const TEST_MODULE = () => {
   TestBed.configureTestingModule({
@@ -50,7 +51,8 @@ export const TEST_MODULE = () => {
       HomeComponent,
       TodoListComponent,
       TodoItemComponent,
-      LoginComponent
+      LoginComponent,
+      LoadingComponent
     ],
     providers: [
       AuthGuard,

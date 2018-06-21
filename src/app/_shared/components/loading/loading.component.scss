@@ -1,0 +1,15 @@
+.app-loading {
+
+  .loading {
+    text-align: center;
+    .mat-spinner {
+      margin: 0 auto;
+    }
+  }
+
+  .error {
+    color: red;
+    font-size: 21pt;
+  }
+
+}
