@@ -6,6 +6,7 @@ export interface IUserModel {
   name?: string;
   token?: string;
 }
+
 export class UserModel {
   public id: string;
   public name: string;

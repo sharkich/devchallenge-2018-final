@@ -11,8 +11,8 @@ const ROUTES: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
 
-  {path: 'list', component: TodoListComponent, canActivate: [AuthGuard]},
-  {path: 'list/:id', component: TodoItemComponent, canActivate: [AuthGuard]},
+  {path: 'examples', component: TodoListComponent, canActivate: [AuthGuard]},
+  {path: 'examples/:id', component: TodoItemComponent, canActivate: [AuthGuard]},
 
   // otherwise redirect to home
   {path: '**', redirectTo: ''}

@@ -2,6 +2,19 @@
 
   <mat-card>
     <h1>List Component</h1>
+
+    <mat-nav-list>
+      <a
+        mat-list-item
+        *ngFor="let example of examples"
+        [routerLink]="[link(example)]">
+        {{ example.name }}
+      </a>
+      <a mat-list-item [routerLink]="['/examples/404']">
+        404 example
+      </a>
+    </mat-nav-list>
+
   </mat-card>
 
 </div>

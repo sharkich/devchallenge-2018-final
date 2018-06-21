@@ -1,7 +1,20 @@
 <div class="app-todo-item">
 
   <mat-card>
-    <h1>Item Component</h1>
+
+    <div *ngIf="!isLoading && !error">
+      <h1>{{example?.name}}</h1>
+      <p>{{example?.id}}</p>
+    </div>
+
+    <div *ngIf="error">
+      <h1 style="color: red;">Error: {{error?.message || error}}</h1>
+    </div>
+
+    <div *ngIf="isLoading">
+      <p>Loading...</p>
+    </div>
+
   </mat-card>
 
 </div>
