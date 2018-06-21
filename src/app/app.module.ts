@@ -17,7 +17,7 @@ import {
 
 import {environment} from '../environments/environment';
 
-import {ROUTING} from './app.routing';
+import {APP_ROUTING} from './app.routing';
 
 import {AuthGuard} from './_shared/auth.guard';
 import {AuthService} from './_shared/services/auth.service';
@@ -41,7 +41,7 @@ import {DbService} from './_shared/services/db.service';
     LoginComponent
   ],
   imports: [
-    ROUTING,
+    APP_ROUTING,
 
     HttpModule,
     FormsModule,

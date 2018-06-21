@@ -7,7 +7,7 @@ import {LoginComponent} from './login/login.component';
 import {TodoListComponent} from './todo-list/todo-list.component';
 import {TodoItemComponent} from './todo-item/todo-item.component';
 
-const ROUTES: Routes = [
+export const APP_ROUTES: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
 
@@ -18,4 +18,4 @@ const ROUTES: Routes = [
   {path: '**', redirectTo: ''}
 ];
 
-export const ROUTING = RouterModule.forRoot(ROUTES);
+export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES);
