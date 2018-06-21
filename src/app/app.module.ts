@@ -51,6 +51,9 @@ import { LoginComponent } from './login/login.component';
     AuthGuard,
     AuthService
   ],
+  entryComponents: [
+    DialogLoginComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -46,7 +46,7 @@ export class DialogLoginComponent {
     }
 
     this.authService.signin()
-      .then(() => this.dialogRef.close());
+      .then(this.onCancel.bind(this));
   }
 
 }
