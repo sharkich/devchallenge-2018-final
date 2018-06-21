@@ -1,4 +1,3 @@
 export class PageController {
-
-  public $loadingPromise: Promise<any>;
+  public promise: Promise<any>;
 }

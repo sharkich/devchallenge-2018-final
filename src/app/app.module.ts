@@ -25,9 +25,9 @@ import {AuthService} from './_shared/services/auth.service';
 import {UsersService} from './_shared/services/users.service';
 import {ExamplesService} from './_shared/services/examples.service';
 
-import {AppComponent} from './app.component';
+import {AppComponent} from './app-root/app.component';
 import {HomeComponent} from './home/home.component';
-import { LoginComponent } from './login/login.component';
+import {LoginComponent} from './login/login.component';
 import {TodoListComponent} from './todo-list/todo-list.component';
 import {TodoItemComponent} from './todo-item/todo-item.component';
 import {LoadingComponent} from './_shared/components/loading/loading.component';

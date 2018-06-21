@@ -2,8 +2,8 @@ import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {AuthService} from './_shared/services/auth.service';
-import {DialogLoginComponent} from './_shared/components/dialog-login/dialog-login.component';
+import {AuthService} from '../_shared/services/auth.service';
+import {DialogLoginComponent} from '../_shared/components/dialog-login/dialog-login.component';
 
 @Component({
   selector: 'app-root',

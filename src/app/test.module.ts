@@ -14,7 +14,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import {APP_ROUTES} from './app.routing';
-import {AppComponent} from './app.component';
+import {AppComponent} from './app-root/app.component';
 import {AuthGuard} from './_shared/auth.guard';
 import {HomeComponent} from './home/home.component';
 import {LoginComponent} from './login/login.component';

@@ -1,5 +1,5 @@
 import {ActivatedRoute} from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {ExampleModel} from '../_shared/models/example.model';
 import {PageController} from '../_shared/controllers/page.controller';
@@ -23,7 +23,7 @@ export class TodoItemComponent extends PageController implements OnInit {
 
   ngOnInit() {
     const id: string = this.activatedRoute.snapshot.params['id'];
-    this.$loadingPromise = this.exampleService.getById(id)
+    this.promise = this.exampleService.getById(id)
       .then((example) => {
         this.example = example;
       });

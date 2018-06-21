@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {ExampleModel} from '../_shared/models/example.model';
 import {ExamplesService} from '../_shared/services/examples.service';
@@ -18,7 +18,7 @@ export class TodoListComponent extends PageController implements OnInit {
   }
 
   ngOnInit() {
-    this.$loadingPromise = this.exampleService.list()
+    this.promise = this.exampleService.list()
       .then((examples) => {
         this.examples = examples;
       });

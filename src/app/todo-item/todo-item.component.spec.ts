@@ -12,6 +12,7 @@ describe('TodoItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TodoItemComponent);
     component = fixture.componentInstance;
+    component.promise = Promise.resolve();
     fixture.detectChanges();
   });
 

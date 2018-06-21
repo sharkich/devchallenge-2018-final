@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {TodoListComponent} from './todo-list.component';
 import {TEST_MODULE} from '../test.module';
+import {TodoListComponent} from './todo-list.component';
 
 describe('TodoListComponent', () => {
   let component: TodoListComponent;
@@ -12,6 +12,7 @@ describe('TodoListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TodoListComponent);
     component = fixture.componentInstance;
+    component.promise = Promise.resolve();
     fixture.detectChanges();
   });
 
