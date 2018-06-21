@@ -1,19 +1,32 @@
-import {AppComponent} from './app.component';
 import {TestBed, async} from '@angular/core/testing';
-import {MatButtonModule, MatCardModule, MatToolbarModule} from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule, MatCardModule, MatDialogModule, MatInputModule, MatToolbarModule} from '@angular/material';
+
+import {AppComponent} from './app.component';
+import {AuthService} from './_shared/services/auth.service';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NoopAnimationsModule,
+
         MatCardModule,
+        MatInputModule,
+        MatDialogModule,
         MatButtonModule,
-        MatToolbarModule
+        MatToolbarModule,
       ],
       declarations: [
         AppComponent
       ],
+      providers: [
+        AuthService
+      ]
     }).compileComponents();
   }));
 

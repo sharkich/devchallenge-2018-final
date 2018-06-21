@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import {AuthService} from './_shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -19,18 +20,20 @@ import { environment } from '../environments/environment';
     HttpModule,
     FormsModule,
     BrowserModule,
-    MatInputModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
 
     MatCardModule,
+    MatInputModule,
     MatDialogModule,
     MatButtonModule,
     MatToolbarModule,
 
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
   ],
-  providers: [],
+  providers: [
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
