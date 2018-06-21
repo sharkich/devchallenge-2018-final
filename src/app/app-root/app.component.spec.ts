@@ -1,11 +1,11 @@
+import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material';
 import {TestBed, async} from '@angular/core/testing';
 
 import {TEST_MODULE} from '../test.module';
 import {AppComponent} from './app.component';
 import {AuthService} from '../_shared/services/auth.service';
-import {MatDialog} from '@angular/material';
 import {DialogLoginComponent} from '../_shared/components/dialog-login/dialog-login.component';
-import {Router} from '@angular/router';
 
 describe('AppComponent', () => {
 
@@ -104,6 +104,13 @@ describe('AppComponent', () => {
     spyOn(router, 'navigate');
     component.logoff();
     expect(router.navigate).toHaveBeenCalledWith(['/']);
+  }));
+
+  it('should exist .main with router-outlet', async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('.main router-outlet')).toBeTruthy();
   }));
 
 });

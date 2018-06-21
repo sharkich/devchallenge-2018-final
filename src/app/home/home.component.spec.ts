@@ -1,21 +1,23 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, TestBed} from '@angular/core/testing';
 
 import {HomeComponent} from './home.component';
 import {TEST_MODULE} from '../test.module';
 
 describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async(TEST_MODULE));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
   it('should create', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component: HomeComponent = fixture.debugElement.componentInstance;
     expect(component).toBeTruthy();
   });
+
+  it('should have `Home` link', async(() => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('h1').textContent).toContain('Dev Challenge 12');
+  }));
+
 });
