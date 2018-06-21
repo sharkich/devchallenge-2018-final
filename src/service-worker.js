@@ -7,8 +7,9 @@ const FILES_TO_CACHE = [
   // General App
   '/runtime.js',
   '/polyfills.js',
-  '/styles.js',
-  '/vendor.js',
+  // '/styles.js',
+  '/styles.css',
+  // '/vendor.js',
   '/main.js',
   '/service-worker.js',
   '/favicon.ico',
@@ -31,7 +32,14 @@ self.addEventListener('install', (event) => {
       .then((cache) => {
         console.log('[ServiceWorker] Caching app shell');
         return cache.addAll(FILES_TO_CACHE)
-          .then(() => self.skipWaiting());
+          .then((res) => {
+            console.log('res', res);
+            return self.skipWaiting();
+          });
+      })
+      .catch((err) => {
+        console.log('err', err);
+        return Promise.reject(err);
       })
   );
 });
@@ -47,6 +55,10 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request)
       .then((response) => {
         return response || fetch(event.request);
+      })
+      .catch((err) => {
+        console.log('err', err);
+        return Promise.reject(err);
       })
   );
 });
