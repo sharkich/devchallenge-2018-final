@@ -7,9 +7,12 @@ const FILES_TO_CACHE = [
   // General App
   '/runtime.js',
   '/polyfills.js',
-  // '/styles.js',
-  '/styles.css',
-  // '/vendor.js',
+
+  '/vendor.js', // todo dev
+  '/styles.js', // todo dev
+
+  // '/styles.css', // todo prod
+
   '/main.js',
   '/service-worker.js',
   '/favicon.ico',
