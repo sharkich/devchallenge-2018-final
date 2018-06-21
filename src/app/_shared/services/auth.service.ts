@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 
 declare var require: any;
 const uuid = require('uuid/v1');
 
 import {APP_CONFIG} from '../../app.config';
+import {UserModel} from '../models/user.model';
 
 const TOKEN = APP_CONFIG.localStorage.token;
 
@@ -13,18 +14,13 @@ const TOKEN = APP_CONFIG.localStorage.token;
 @Injectable()
 export class AuthService {
 
-  private _token: string;
+  public user: UserModel;
+
+  public $changeAuthorization: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() {
-    this._token = window.localStorage.getItem(TOKEN) || null;
-  }
-
-  /**
-   * Check is user sign in
-   * @return {boolean}
-   */
-  public isLogin(): boolean {
-    return !!this._token;
+    const token = window.localStorage.getItem(TOKEN) || null;
+    this.user = new UserModel({token});
   }
 
   /**
@@ -32,8 +28,9 @@ export class AuthService {
    * @return {Promise<any>}
    */
   public signin(): Promise<any> {
-    this._token = uuid();
-    window.localStorage.setItem(TOKEN, this._token);
+    this.user.token = uuid();
+    window.localStorage.setItem(TOKEN, this.user.token);
+    this.$changeAuthorization.emit(this.user.isAuthorised);
     return Promise.resolve();
   }
 
@@ -42,8 +39,9 @@ export class AuthService {
    * @return {Promise<any>}
    */
   public signout(): Promise<any> {
-    this._token = null;
+    this.user.token = null;
     window.localStorage.removeItem(TOKEN);
+    this.$changeAuthorization.emit(this.user.isAuthorised);
     return Promise.resolve();
   }
 }

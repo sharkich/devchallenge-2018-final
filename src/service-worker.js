@@ -1,9 +1,10 @@
-const APP_CACHE_NAME = 'final-app-6-1';
+const APP_CACHE_NAME = 'final-app';
 
 const FILES_TO_CACHE = [
   // '/',
   // '/index.html',
   // '/404.html',
+
   // General App
   '/runtime.js',
   '/polyfills.js',
@@ -29,39 +30,24 @@ const FILES_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
-  console.log('[ServiceWorker] Install');
   event.waitUntil(
     caches.open(APP_CACHE_NAME)
-      .then((cache) => {
-        console.log('[ServiceWorker] Caching app shell');
-        return cache.addAll(FILES_TO_CACHE)
-          .then((res) => {
-            console.log('res', res);
-            return self.skipWaiting();
-          });
-      })
-      .catch((err) => {
-        console.log('err', err);
-        return Promise.reject(err);
-      })
+      .then((cache) => cache.addAll(FILES_TO_CACHE).then(() => self.skipWaiting()))
   );
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('[ServiceWorker] Activate');
   return self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-  console.log('[ServiceWorker] Fetch', event.request.url);
+  if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+    return;
+  }
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
         return response || fetch(event.request);
-      })
-      .catch((err) => {
-        console.log('err', err);
-        return Promise.reject(err);
       })
   );
 });

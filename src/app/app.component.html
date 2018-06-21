@@ -1,27 +1,29 @@
 <div class="app">
 
   <mat-toolbar color="primary">
-    <h1 class="title">
-      <span>
-        Final!
-      </span>
-    </h1>
+    <nav class="docs-navbar-header">
+      <a mat-button [routerLink]="['/']">Home</a>
+      <a mat-button [routerLink]="['/list']">List</a>
+      <a mat-button [routerLink]="['/list/123']">Item</a>
+    </nav>
 
-    <span class="space text-center">
-      Dev Challenge 12
-    </span>
+    <div class="space"></div>
 
     <div class="login">
-      <button mat-raised-button>Sign in</button>
+      <div *ngIf="!isAuthorised">
+        <a mat-button [routerLink]="['/login']">Login</a>
+        <button mat-raised-button (click)="login()">Sign in</button>
+      </div>
+      <div *ngIf="isAuthorised">
+        <button mat-raised-button (click)="logoff()">Sign off</button>
+      </div>
     </div>
+
+
   </mat-toolbar>
 
-  <mat-card>
-    <h1>Hello, World!</h1>
-  </mat-card>
-
-  <mat-card>
-    <h1>Hello, World!</h1>
-  </mat-card>
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
 
 </div>
