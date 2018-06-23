@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 
 @Component({
@@ -6,15 +6,22 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public isAuthorised: boolean;
+  @ViewChild('spaceCanvas') spaceCanvas: ElementRef;
+  public context: CanvasRenderingContext2D;
+
 
   constructor() {
   }
 
   ngOnInit() {
     console.log('init');
+  }
+
+  ngAfterViewInit(): void {
+    this.context = (<HTMLCanvasElement>this.spaceCanvas.nativeElement).getContext('2d');
+    console.log('context', this.context);
   }
 
   ngOnDestroy() {
