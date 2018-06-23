@@ -1,9 +1,18 @@
 <div class="app-root">
 
   <div class="header">
-    <h1>{{score}}</h1>
-    <h2 *ngIf="spaceship?.isCrashed" class="finish">The end.</h2>
-    <button *ngIf="spaceship?.isCrashed" (click)="start()">Start</button>
+    <p>
+      Score: <b>{{score}}</b>
+    </p>
+    <p>
+      Level: <b>{{level}}</b>
+    </p>
+
+    <div *ngIf="spaceship?.isCrashed">
+      <h2 class="finish">The end.</h2>
+      <button (click)="start()">Start</button>
+    </div>
+
   </div>
 
   <div class="main">

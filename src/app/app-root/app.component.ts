@@ -271,7 +271,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private fire() {
     if (this.spaceship.isFire) {
-      console.log('fire');
       this.bullets.push(new SpacesbodyModel({
         position: {
           x: this.spaceship.position.x,
@@ -284,6 +283,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         angle: this.spaceship.angle,
         isMove: true
       }));
+    }
+  }
+
+  public get level(): number {
+    if (this.score < 20) {
+      return 1;
+    } else if (this.score < 100) {
+      return 2;
+    } else if (this.score < 250) {
+      return 3;
+    } else if (this.score < 500) {
+      return 4;
+    } else if (this.score < 1000) {
+      return 5;
     }
   }
 
