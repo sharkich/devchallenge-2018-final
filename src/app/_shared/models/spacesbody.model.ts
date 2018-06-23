@@ -21,7 +21,7 @@ export class SpacesbodyModel {
     this.position = new PositionModel(data.position || {x: 0, y: 0});
     this.speed = data.speed || 1;
     this.color = data.color || 'white';
-    this.radius = data.radius || 8;
+    this.radius = data.radius || 32;
     this.turnSpeed = data.turnSpeed || Math.PI / 180;
     this.angle = data.angle || Math.PI / 2;
     this.isMove = !!data.isMove;

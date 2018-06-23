@@ -16,7 +16,7 @@ import {EnemyModel} from '../_shared/models/enemy.model';
 const CANVAS_WIDTH = window.innerWidth;
 const CANVAS_HEIGHT = window.innerHeight;
 
-const SPACESBODIES = 300;
+const SPACESBODIES = 50;
 const ENEMIES = 10;
 
 @Component({
@@ -28,6 +28,9 @@ const ENEMIES = 10;
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('shipImg') shipImgEl: ElementRef;
+  @ViewChild('strawberryImg') strawberryImg: ElementRef;
+
+  @ViewChild('bombImg') bombImg: ElementRef;
 
   @ViewChild('canvas') canvasEl: ElementRef;
   public context: CanvasRenderingContext2D;
@@ -82,9 +85,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.level = 1;
     this.score = 0;
     this.spaceship = new SpaceshipModel({position: {x: 40, y: 200}});
+    this.spacesbodies = [];
+    this.enemies = [];
+    this.bullets = [];
     this.updateLevel(1);
-    this.initSpacesbodies();
-    this.initEnemies();
+
+    setInterval(() => {
+      this.initSpacesbodies();
+      this.initEnemies();
+    }, 36000);
 
     this.draw();
 
@@ -109,8 +118,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       if (spacesbody.isCrashed) {
         return;
       }
+
       spacesbody.draw();
-      this.drawSpacebody(spacesbody);
+      if (this.strawberryImg) {
+        this.context.save();
+        this.context.translate(spacesbody.position.x, spacesbody.position.y);
+        this.context.rotate(spacesbody.angle);
+        this.context.drawImage(
+          this.strawberryImg.nativeElement,
+          -spacesbody.radius / 2, -spacesbody.radius / 2,
+          spacesbody.radius, spacesbody.radius);
+        this.context.restore();
+      } else {
+        this.drawSpacebody(spacesbody);
+      }
     });
 
     // enemies
@@ -118,8 +139,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       if (enemy.isCrashed) {
         return;
       }
+
       enemy.draw();
-      this.drawSpacebody(enemy);
+      if (this.bombImg) {
+        this.context.save();
+        this.context.translate(enemy.position.x, enemy.position.y);
+        this.context.rotate(enemy.angle);
+        this.context.drawImage(
+          this.bombImg.nativeElement,
+          -enemy.radius / 2, -enemy.radius / 2,
+          enemy.radius, enemy.radius);
+        this.context.restore();
+      } else {
+        this.drawSpacebody(enemy);
+      }
     });
 
     // bullets
@@ -257,9 +290,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initSpacesbodies() {
-    if (this.level === 1) {
-      this.spacesbodies = [];
-    }
     for (let i = 0; i <= SPACESBODIES; i++) {
       const rotate = Math.random() < 0.5;
       const body = new SpacesbodyModel({
@@ -281,9 +311,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initEnemies() {
-    if (this.level === 1) {
-      this.enemies = [];
-    }
     for (let i = 0; i <= ENEMIES; i++) {
       const rotate = Math.random() < 0.5;
       const body = new EnemyModel({
@@ -315,7 +342,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.spaceship.fire();
     if (this.spaceship.isFireble()) {
       this.spaceship.fireReload();
-      this.bullets.push(new SpacesbodyModel({
+      const bullet = new SpacesbodyModel({
         position: {
           x: this.spaceship.position.x,
           y: this.spaceship.position.y
@@ -324,9 +351,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         width: 4,
         height: 4,
         speed: 10,
+        radius: 8,
         angle: this.spaceship.angle,
         isMove: true
-      }));
+      });
+      switch (this.level) {
+        case 5:
+          bullet.speed = 50;
+          bullet.radius = 32;
+          break;
+        case 4:
+          bullet.speed = 40;
+          bullet.radius = 24;
+          break;
+        case 3:
+          bullet.speed = 30;
+          bullet.radius = 16;
+          break;
+        case 2:
+          bullet.speed = 20;
+          bullet.radius = 12;
+          break;
+      }
+      this.bullets.push(bullet);
     }
   }
 
@@ -366,25 +413,25 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.spaceship.turnSpeed = Math.PI / 20;
         break;
       case 4:
-        this.spaceship.fireReloadMax = 5;
+        this.spaceship.fireReloadMax = 1;
         this.spaceship.speed = 7;
         this.spaceship.radius = 50;
         this.spaceship.turnSpeed = Math.PI / 30;
         break;
       case 3:
-        this.spaceship.fireReloadMax = 10;
+        this.spaceship.fireReloadMax = 5;
         this.spaceship.speed = 6;
         this.spaceship.radius = 56;
         this.spaceship.turnSpeed = Math.PI / 40;
         break;
       case 2:
-        this.spaceship.fireReloadMax = 15;
+        this.spaceship.fireReloadMax = 10;
         this.spaceship.speed = 5;
         this.spaceship.radius = 60;
         this.spaceship.turnSpeed = Math.PI / 50;
         break;
       case 1:
-        this.spaceship.fireReloadMax = 20;
+        this.spaceship.fireReloadMax = 15;
         this.spaceship.speed = 4;
         this.spaceship.radius = 64;
         this.spaceship.turnSpeed = Math.PI / 60;
