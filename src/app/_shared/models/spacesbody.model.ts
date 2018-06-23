@@ -9,6 +9,7 @@ export class SpacesbodyModel {
   public width: number;
   public height: number;
 
+  public turnSpeed: number;
   public angle: number;
 
   public isMove: boolean;
@@ -23,6 +24,7 @@ export class SpacesbodyModel {
     this.color = data.color || 'white';
     this.width = data.width || 8;
     this.height = data.height || 8;
+    this.turnSpeed = data.turnSpeed || Math.PI / 180;
     this.angle = data.angle || Math.PI / 2;
     this.isMove = !!data.isMove;
     this.isRotatingLeft = !!data.isRotatingLeft;
@@ -52,10 +54,10 @@ export class SpacesbodyModel {
 
   public rotare() {
     if (this.isRotatingRight) {
-      this.angle += Math.PI / 180;
+      this.angle += this.turnSpeed;
 
     } else if (this.isRotatingLeft) {
-      this.angle -= Math.PI / 180;
+      this.angle -= this.turnSpeed;
     }
   }
 

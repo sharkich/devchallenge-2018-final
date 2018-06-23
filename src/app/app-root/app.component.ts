@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public canvas: HTMLCanvasElement;
 
+  public level = 1;
   public score = 0;
 
   public spaceship: SpaceshipModel;
@@ -76,8 +77,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public start() {
+    this.level = 1;
     this.score = 0;
     this.spaceship = new SpaceshipModel({position: {x: 40, y: 200}});
+    this.updateLevel(1);
     this.initSpacesbodies();
     this.initEnemies();
 
@@ -97,6 +100,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // spaceship
     this.spaceship.draw();
+    if (this.spaceship.position.x < 0) {
+      this.spaceship.position.x = CANVAS_WIDTH;
+    }
+    if (this.spaceship.position.y < 0) {
+      this.spaceship.position.y = CANVAS_HEIGHT;
+    }
+    if (this.spaceship.position.x > CANVAS_WIDTH) {
+      this.spaceship.position.x = 0;
+    }
+    if (this.spaceship.position.y > CANVAS_HEIGHT) {
+      this.spaceship.position.y = 0;
+    }
     this.drawSpaceship();
 
     // spacesbodies
@@ -199,7 +214,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     // spacesbodies
     this.spacesbodies = this.spacesbodies.filter((spacesbody) => {
       if (this.spaceship.isHitWith(spacesbody)) {
-        this.score++;
+        this.addScore(1);
         spacesbody.die();
         return false;
       }
@@ -211,7 +226,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       let isHited = false;
       this.enemies = this.enemies.filter((enemy) => {
         if (bullet.isHitWith(enemy)) {
-          this.score += 10;
+          this.addScore(10);
           isHited = true;
           enemy.die();
           return false;
@@ -286,17 +301,65 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public get level(): number {
-    if (this.score < 20) {
+  private addScore(score: number) {
+    this.score += score;
+    const level = this.getLevel(this.score);
+    if (this.level !== level) {
+      this.updateLevel(level);
+    }
+  }
+
+  private getLevel(score: number): number {
+    if (score < 20) {
       return 1;
-    } else if (this.score < 100) {
+    } else if (score < 100) {
       return 2;
-    } else if (this.score < 250) {
+    } else if (score < 250) {
       return 3;
-    } else if (this.score < 500) {
+    } else if (score < 500) {
       return 4;
-    } else if (this.score < 1000) {
+    } else if (score < 1000) {
       return 5;
+    }
+  }
+
+  private updateLevel(level: number) {
+    this.level = level;
+    this.updateSpacesshipByLevel(level);
+  }
+
+  private updateSpacesshipByLevel(level: number) {
+    switch (level) {
+      case 5:
+        this.spaceship.speed = 12;
+        this.spaceship.width = 8;
+        this.spaceship.height = 8;
+        this.spaceship.turnSpeed = Math.PI / 90;
+        break;
+      case 4:
+        this.spaceship.speed = 10;
+        this.spaceship.width = 12;
+        this.spaceship.height = 12;
+        this.spaceship.turnSpeed = Math.PI / 100;
+        break;
+      case 3:
+        this.spaceship.speed = 8;
+        this.spaceship.width = 16;
+        this.spaceship.height = 16;
+        this.spaceship.turnSpeed = Math.PI / 120;
+        break;
+      case 2:
+        this.spaceship.speed = 6;
+        this.spaceship.width = 20;
+        this.spaceship.height = 20;
+        this.spaceship.turnSpeed = Math.PI / 150;
+        break;
+      case 1:
+        this.spaceship.speed = 4;
+        this.spaceship.width = 24;
+        this.spaceship.height = 24;
+        this.spaceship.turnSpeed = Math.PI / 180;
+        break;
     }
   }
 
