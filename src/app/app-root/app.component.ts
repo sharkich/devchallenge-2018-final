@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {SpaceshipModel} from '../_shared/models/spaceship.model';
 import {KeysService} from '../_shared/services/keys.service';
+import {SpacesbodyModel} from '../_shared/models/spacesbody.model';
 
 
 @Component({
@@ -19,10 +20,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     position: {x: 40, y: 200}
   });
 
+  public spacesbodies: SpacesbodyModel[] = [];
+
   constructor(private keyService: KeysService) {
   }
 
   ngOnInit() {
+    const body = new SpacesbodyModel({
+      position: {x: 400, y: 100},
+      speed: 1,
+      angle: Math.PI,
+      color: 'green',
+      isMove: true,
+      isRotatingRight: true
+    });
+    this.spacesbodies.push(body);
+
     this.keyService.$onPressDown.subscribe(this.engineGoBack.bind(this));
     this.keyService.$onPressUp.subscribe(this.engineOn.bind(this));
     this.keyService.$onPressLeft.subscribe(() => this.turnLeft(true));
@@ -48,30 +61,39 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private draw() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.updateSpaceship();
+
+    this.spaceship.draw();
     this.drawSpaceship();
+
+    this.spacesbodies.forEach((spacesbody) => {
+      spacesbody.draw();
+      this.drawSpacebody(spacesbody);
+    });
+
     requestAnimationFrame(this.draw.bind(this));
   }
 
   private drawSpaceship() {
     this.context.save();
-    this.context.beginPath();
-    this.context.translate(this.spaceship.position.x, this.spaceship.position.y);
-    this.context.rotate(this.spaceship.angle);
-    this.context.rect(
-      this.spaceship.width * -0.5, this.spaceship.height * -0.5,
-      this.spaceship.width, this.spaceship.height);
-    this.context.fillStyle = this.spaceship.color;
-    this.context.fill();
-    this.context.closePath();
-
+    this.drawSpacebody(this.spaceship, true);
     this.drawFlame();
-
     this.context.restore();
   }
 
-  private updateSpaceship() {
-    this.spaceship.draw();
+  private drawSpacebody(spacebody: SpacesbodyModel, isSkipContex = false) {
+    if (!isSkipContex) {
+      this.context.save();
+    }
+    this.context.beginPath();
+    this.context.translate(spacebody.position.x, spacebody.position.y);
+    this.context.rotate(spacebody.angle);
+    this.context.rect(spacebody.width * -0.5, spacebody.height * -0.5, spacebody.width, spacebody.height);
+    this.context.fillStyle = spacebody.color;
+    this.context.fill();
+    this.context.closePath();
+    if (!isSkipContex) {
+      this.context.restore();
+    }
   }
 
   private turnLeft(isStart = false) {
@@ -94,13 +116,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.spaceship.stop();
   }
 
-  private goBack() {
-    this.spaceship.isGoBack = true;
-  }
-
   private drawFlame() {
     // Draw the flame if engine is on
-    if (this.spaceship.isEngineOn) {
+    if (this.spaceship.isMove) {
       this.context.beginPath();
       this.context.moveTo(this.spaceship.width * -0.5, this.spaceship.height * 0.5);
       this.context.lineTo(this.spaceship.width * 0.5, this.spaceship.height * 0.5);
