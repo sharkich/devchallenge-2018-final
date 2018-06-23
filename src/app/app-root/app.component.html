@@ -2,6 +2,8 @@
 
   <div class="header">
     <h1>{{score}}</h1>
+    <h2 *ngIf="spaceship?.isCrashed" class="finish">The end.</h2>
+    <button *ngIf="spaceship?.isCrashed" (click)="start()">Start</button>
   </div>
 
   <div class="main">

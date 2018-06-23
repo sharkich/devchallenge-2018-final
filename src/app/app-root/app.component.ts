@@ -1,15 +1,29 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {SpaceshipModel} from '../_shared/models/spaceship.model';
 import {KeysService} from '../_shared/services/keys.service';
 import {SpacesbodyModel} from '../_shared/models/spacesbody.model';
+import {EnemyModel} from '../_shared/models/enemy.model';
 
 const CANVAS_WIDTH = 900;
 const CANVAS_HEIGHT = 400;
 
+const SPACESBODIES = 300;
+const ENEMIES = 10;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -20,32 +34,18 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public score = 0;
 
-  public spaceship = new SpaceshipModel({
-    position: {x: 40, y: 200}
-  });
+  public spaceship: SpaceshipModel;
 
   public spacesbodies: SpacesbodyModel[] = [];
 
-  constructor(private keyService: KeysService) {
+  public enemies: EnemyModel[] = [];
+
+  constructor(
+    private keyService: KeysService,
+    private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    for (let i = 0; i <= 100; i++) {
-      const rotate = Math.random() < 0.5;
-      this.spacesbodies.push(new SpacesbodyModel({
-        position: {
-          x: Math.round(Math.random() * CANVAS_WIDTH),
-          y: Math.round(Math.random() * CANVAS_HEIGHT)
-        },
-        speed: Math.round(Math.random() * 10),
-        angle: Math.PI * Math.random(),
-        color: 'green',
-        isMove: Math.random() > 0.1,
-        isRotatingLeft: rotate,
-        isRotatingRight: !rotate
-      }));
-    }
-
     this.keyService.$onPressDown.subscribe(this.engineGoBack.bind(this));
     this.keyService.$onPressUp.subscribe(this.engineOn.bind(this));
     this.keyService.$onPressLeft.subscribe(() => this.turnLeft(true));
@@ -63,26 +63,52 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.canvas.height = CANVAS_HEIGHT;
 
     this.context = this.canvas.getContext('2d');
-    this.draw();
+
+    this.start();
   }
 
   ngOnDestroy() {
   }
 
+  public start() {
+    this.score = 0;
+    this.spaceship = new SpaceshipModel({position: {x: 40, y: 200}});
+    this.initSpacesbodies();
+    this.initEnemies();
+
+    this.draw();
+
+    this.cd.detectChanges();
+  }
+
   private draw() {
     this.checkHits();
+    if (this.spaceship.isCrashed) {
+      return;
+    }
 
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    // spaceship
     this.spaceship.draw();
     this.drawSpaceship();
 
+    // spacesbodies
     this.spacesbodies.forEach((spacesbody) => {
       if (spacesbody.isCrashed) {
         return;
       }
       spacesbody.draw();
       this.drawSpacebody(spacesbody);
+    });
+
+    // enemies
+    this.enemies.forEach((enemy) => {
+      if (enemy.isCrashed) {
+        return;
+      }
+      enemy.draw();
+      this.drawSpacebody(enemy);
     });
 
     requestAnimationFrame(this.draw.bind(this));
@@ -145,6 +171,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private checkHits() {
+    // enemies
+    this.enemies.forEach((enemy) => {
+      if (this.spaceship.isHitWith(enemy)) {
+        this.spaceship.die();
+      }
+    });
+
+    // spacesbodies
     this.spacesbodies = this.spacesbodies.filter((spacesbody) => {
       if (this.spaceship.isHitWith(spacesbody)) {
         this.score++;
@@ -153,6 +187,44 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       return true;
     });
+    this.cd.detectChanges();
+  }
+
+  private initSpacesbodies() {
+    this.spacesbodies = [];
+    for (let i = 0; i <= SPACESBODIES; i++) {
+      const rotate = Math.random() < 0.5;
+      this.spacesbodies.push(new SpacesbodyModel({
+        position: {
+          x: Math.round(Math.random() * CANVAS_WIDTH),
+          y: Math.round(Math.random() * CANVAS_HEIGHT)
+        },
+        speed: Math.round(Math.random() * 10),
+        angle: Math.PI * Math.random(),
+        color: 'green',
+        isMove: Math.random() > 0.1,
+        isRotatingLeft: rotate,
+        isRotatingRight: !rotate
+      }));
+    }
+  }
+
+  private initEnemies() {
+    this.enemies = [];
+    for (let i = 0; i <= ENEMIES; i++) {
+      const rotate = Math.random() < 0.5;
+      this.enemies.push(new EnemyModel({
+        position: {
+          x: Math.round(Math.random() * CANVAS_WIDTH),
+          y: Math.round(Math.random() * CANVAS_HEIGHT)
+        },
+        speed: Math.round(Math.random() * 10),
+        angle: Math.PI * Math.random(),
+        isMove: Math.random() > 0.1,
+        isRotatingLeft: rotate,
+        isRotatingRight: !rotate
+      }));
+    }
   }
 
 }
