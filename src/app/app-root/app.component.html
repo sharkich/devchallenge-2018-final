@@ -1,29 +1,11 @@
-<div class="app">
+<div class="app-root">
 
-  <mat-toolbar color="primary">
-    <nav class="docs-navbar-header">
-      <a mat-button [routerLink]="['/']">Home</a>
-      <a mat-button [routerLink]="['/examples']">Examples</a>
-      <a mat-button [routerLink]="['/users']">Users</a>
-    </nav>
+  <div class="header">
 
-    <div class="space"></div>
-
-    <div class="login">
-      <div *ngIf="!isAuthorised">
-        <a mat-button [routerLink]="['/login']">Login</a>
-        <button mat-raised-button (click)="login()">Sign in</button>
-      </div>
-      <div *ngIf="isAuthorised">
-        <button mat-raised-button (click)="logoff()">Sign out</button>
-      </div>
-    </div>
-
-
-  </mat-toolbar>
+  </div>
 
   <div class="main">
-    <router-outlet></router-outlet>
+
   </div>
 
 </div>

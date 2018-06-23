@@ -1,11 +1,24 @@
-.app {
+.app-root {
+  position: relative;
+  height: 100%;
 
-  .mat-toolbar {
-    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
   }
 
   .main {
-    margin-top: 16px;
+    position: absolute;
+    top: 60px;
+    height: 80%;
+    min-height: 400px;
+    left: 4%;
+    width: 92%;
+    min-width: 600px;
+    border: 1px solid #fff;
   }
 
 }
