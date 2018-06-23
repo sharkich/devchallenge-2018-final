@@ -87,7 +87,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private draw() {
-    this.checkHits();
+    this.go();
+
     if (this.spaceship.isCrashed) {
       return;
     }
@@ -184,7 +185,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private checkHits() {
+  private go() {
+
+    this.fire();
+
     // enemies
     this.enemies.forEach((enemy) => {
       if (this.spaceship.isHitWith(enemy)) {
@@ -201,6 +205,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       return true;
     });
+
+    // bullets
+    this.bullets = this.bullets.filter((bullet) => {
+      let isHited = false;
+      this.enemies = this.enemies.filter((enemy) => {
+        if (bullet.isHitWith(enemy)) {
+          this.score += 10;
+          isHited = true;
+          enemy.die();
+          return false;
+        }
+        return true;
+      });
+      return !isHited;
+    });
+
     this.cd.detectChanges();
   }
 
@@ -242,21 +262,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private startFire() {
-    this.bullets.push(new SpacesbodyModel({
-      position: {
-        x: this.spaceship.position.x,
-        y: this.spaceship.position.y
-      },
-      color: 'orange',
-      width: 4,
-      height: 4,
-      speed: 10,
-      angle: this.spaceship.angle,
-      isMove: true
-    }));
+    this.spaceship.isFire = true;
   }
 
   private stopFire() {
+    this.spaceship.isFire = false;
+  }
+
+  private fire() {
+    if (this.spaceship.isFire) {
+      console.log('fire');
+      this.bullets.push(new SpacesbodyModel({
+        position: {
+          x: this.spaceship.position.x,
+          y: this.spaceship.position.y
+        },
+        color: 'orange',
+        width: 4,
+        height: 4,
+        speed: 10,
+        angle: this.spaceship.angle,
+        isMove: true
+      }));
+    }
   }
 
 }
