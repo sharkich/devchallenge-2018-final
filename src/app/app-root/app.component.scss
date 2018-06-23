@@ -11,16 +11,12 @@
   }
 
   .main {
-    position: absolute;
-    top: 60px;
-    height: 80%;
-    min-height: 400px;
-    left: 4%;
-    width: 92%;
-    min-width: 600px;
+    height: 400px;
+    width: 900px;
+    margin: 60px auto 0 auto;
     border: 1px solid #fff;
 
-    .space-canvas {
+    .canvas {
       width: 100%;
       height: 100%;
     }

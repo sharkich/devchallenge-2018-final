@@ -5,6 +5,7 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 
 import {AppComponent} from './app-root/app.component';
+import {KeysService} from './_shared/services/keys.service';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,9 @@ import {AppComponent} from './app-root/app.component';
     BrowserModule,
 
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+  ],
+  providers: [
+    KeysService
   ],
   bootstrap: [AppComponent]
 })
