@@ -23,3 +23,16 @@ Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.gi
 For launching built version use some simple web-server. For example:
 `cd dist/devchallenge2018final`
 `python -m SimpleHTTPServer 8000` or `http-server --gzip`
+
+## Game
+Keys: 
+
+Arrows - Up, Down, Left, Right - for moving
+
+Space - for shooting
+
+Enter - Start new game
+
+Spaceship has 5 levels with different kind of weapons and ship characteristics.
+
+Enemies generate when user achieved the new level and by the time limit

@@ -25,8 +25,7 @@ const FILES_TO_CACHE = [
   '/assets/icons/icon-192x192.png',
   '/assets/icons/icon-256x256.png',
   '/assets/icons/icon-384x384.png',
-  '/assets/icons/icon-512x512.png',
-  '/assets/google-icons-font.woff2'
+  '/assets/icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
