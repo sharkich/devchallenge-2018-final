@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.keyService.$onPressDown.subscribe(this.engineOff.bind(this));
+    this.keyService.$onPressDown.subscribe(this.engineGoBack.bind(this));
     this.keyService.$onPressUp.subscribe(this.engineOn.bind(this));
     this.keyService.$onPressLeft.subscribe(() => this.turnLeft(true));
     this.keyService.$onPressRight.subscribe(() => this.turnRight(true));
@@ -65,6 +65,40 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context.fill();
     this.context.closePath();
 
+    this.drawFlame();
+
+    this.context.restore();
+  }
+
+  private updateSpaceship() {
+    this.spaceship.draw();
+  }
+
+  private turnLeft(isStart = false) {
+    this.spaceship.turn(true, isStart);
+  }
+
+  private turnRight(isStart = false) {
+    this.spaceship.turn(false, isStart);
+  }
+
+  private engineOn() {
+    this.spaceship.go();
+  }
+
+  private engineGoBack() {
+    this.spaceship.go(true);
+  }
+
+  private engineOff() {
+    this.spaceship.stop();
+  }
+
+  private goBack() {
+    this.spaceship.isGoBack = true;
+  }
+
+  private drawFlame() {
     // Draw the flame if engine is on
     if (this.spaceship.isEngineOn) {
       this.context.beginPath();
@@ -76,37 +110,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.context.fillStyle = 'orange';
       this.context.fill();
     }
-    this.context.restore();
-  }
-
-  private updateSpaceship() {
-    if (this.spaceship.isRotatingRight) {
-      this.spaceship.angle += Math.PI / 180;
-
-    } else if (this.spaceship.isRotatingLeft) {
-      this.spaceship.angle -= Math.PI / 180;
-    }
-
-    if (this.spaceship.isEngineOn) {
-      this.spaceship.position.x += Math.sin(this.spaceship.angle);
-      this.spaceship.position.y -= Math.cos(this.spaceship.angle);
-    }
-  }
-
-  private turnLeft(isStart = false) {
-    this.spaceship.isRotatingLeft = isStart;
-  }
-
-  private turnRight(isStart = false) {
-    this.spaceship.isRotatingRight = isStart;
-  }
-
-  private engineOn() {
-    this.spaceship.isEngineOn = true;
-  }
-
-  private engineOff() {
-    this.spaceship.isEngineOn = false;
   }
 
 }
