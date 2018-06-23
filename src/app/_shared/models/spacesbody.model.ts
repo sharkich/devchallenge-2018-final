@@ -6,10 +6,10 @@ export class SpacesbodyModel {
 
   public color: string;
 
-  public width = 8;
-  public height = 8;
+  public width: number;
+  public height: number;
 
-  public angle = Math.PI / 2;
+  public angle: number;
 
   public isMove: boolean;
   public isRotatingLeft: boolean;
@@ -21,6 +21,9 @@ export class SpacesbodyModel {
     this.position = new PositionModel(data.position || {x: 0, y: 0});
     this.speed = data.speed || 1;
     this.color = data.color || 'white';
+    this.width = data.width || 8;
+    this.height = data.height || 8;
+    this.angle = data.angle || Math.PI / 2;
     this.isMove = !!data.isMove;
     this.isRotatingLeft = !!data.isRotatingLeft;
     this.isRotatingRight = !!data.isRotatingRight;

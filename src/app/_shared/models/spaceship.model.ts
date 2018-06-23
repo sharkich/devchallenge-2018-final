@@ -3,6 +3,7 @@ import {SpacesbodyModel} from './spacesbody.model';
 export class SpaceshipModel extends SpacesbodyModel {
   public speedBack = 1;
   public isGoBack = false;
+  public isFire = false;
 
   constructor(data?: any) {
     super(data);

@@ -40,6 +40,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public enemies: EnemyModel[] = [];
 
+  public bullets: SpacesbodyModel[] = [];
+
   constructor(
     private keyService: KeysService,
     private cd: ChangeDetectorRef) {
@@ -50,11 +52,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.keyService.$onPressUp.subscribe(this.engineOn.bind(this));
     this.keyService.$onPressLeft.subscribe(() => this.turnLeft(true));
     this.keyService.$onPressRight.subscribe(() => this.turnRight(true));
+    this.keyService.$onPressEnter.subscribe(this.start.bind(this));
+    this.keyService.$onPressSpace.subscribe(this.startFire.bind(this));
 
     this.keyService.$onLetGoDown.subscribe(this.engineOff.bind(this));
     this.keyService.$onLetGoUp.subscribe(this.engineOff.bind(this));
     this.keyService.$onLetGoLeft.subscribe(() => this.turnLeft());
     this.keyService.$onLetGoRight.subscribe(() => this.turnRight());
+    this.keyService.$onLetGoSpace.subscribe(this.stopFire.bind(this));
   }
 
   ngAfterViewInit(): void {
@@ -109,6 +114,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       enemy.draw();
       this.drawSpacebody(enemy);
+    });
+
+    // bullets
+    this.bullets.forEach((bullet) => {
+      if (bullet.isCrashed) {
+        return;
+      }
+      bullet.draw();
+      this.drawSpacebody(bullet);
     });
 
     requestAnimationFrame(this.draw.bind(this));
@@ -225,6 +239,24 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         isRotatingRight: !rotate
       }));
     }
+  }
+
+  private startFire() {
+    this.bullets.push(new SpacesbodyModel({
+      position: {
+        x: this.spaceship.position.x,
+        y: this.spaceship.position.y
+      },
+      color: 'orange',
+      width: 4,
+      height: 4,
+      speed: 10,
+      angle: this.spaceship.angle,
+      isMove: true
+    }));
+  }
+
+  private stopFire() {
   }
 
 }
