@@ -6,8 +6,7 @@ export class SpacesbodyModel {
 
   public color: string;
 
-  public width: number;
-  public height: number;
+  public radius: number;
 
   public turnSpeed: number;
   public angle: number;
@@ -22,8 +21,7 @@ export class SpacesbodyModel {
     this.position = new PositionModel(data.position || {x: 0, y: 0});
     this.speed = data.speed || 1;
     this.color = data.color || 'white';
-    this.width = data.width || 8;
-    this.height = data.height || 8;
+    this.radius = data.radius || 8;
     this.turnSpeed = data.turnSpeed || Math.PI / 180;
     this.angle = data.angle || Math.PI / 2;
     this.isMove = !!data.isMove;
@@ -76,6 +74,6 @@ export class SpacesbodyModel {
     const w = this.position.x - body.position.x;
     const h = this.position.y - body.position.y;
     const length = Math.sqrt( w * w + h * h );
-    return length <= Math.max(this.width, this.height) + Math.max(body.width, body.height);
+    return length <= this.radius || length < body.radius;
   }
 }

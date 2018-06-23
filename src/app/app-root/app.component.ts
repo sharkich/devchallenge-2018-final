@@ -13,8 +13,8 @@ import {KeysService} from '../_shared/services/keys.service';
 import {SpacesbodyModel} from '../_shared/models/spacesbody.model';
 import {EnemyModel} from '../_shared/models/enemy.model';
 
-const CANVAS_WIDTH = 900;
-const CANVAS_HEIGHT = 400;
+const CANVAS_WIDTH = window.innerWidth;
+const CANVAS_HEIGHT = window.innerHeight;
 
 const SPACESBODIES = 300;
 const ENEMIES = 10;
@@ -26,6 +26,8 @@ const ENEMIES = 10;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  @ViewChild('shipImg') shipImgEl: ElementRef;
 
   @ViewChild('canvas') canvasEl: ElementRef;
   public context: CanvasRenderingContext2D;
@@ -100,18 +102,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // spaceship
     this.spaceship.draw();
-    if (this.spaceship.position.x < 0) {
-      this.spaceship.position.x = CANVAS_WIDTH;
-    }
-    if (this.spaceship.position.y < 0) {
-      this.spaceship.position.y = CANVAS_HEIGHT;
-    }
-    if (this.spaceship.position.x > CANVAS_WIDTH) {
-      this.spaceship.position.x = 0;
-    }
-    if (this.spaceship.position.y > CANVAS_HEIGHT) {
-      this.spaceship.position.y = 0;
-    }
     this.drawSpaceship();
 
     // spacesbodies
@@ -145,8 +135,32 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawSpaceship() {
+    if (this.spaceship.position.x < 0) {
+      this.spaceship.position.x = CANVAS_WIDTH;
+    }
+    if (this.spaceship.position.y < 0) {
+      this.spaceship.position.y = CANVAS_HEIGHT;
+    }
+    if (this.spaceship.position.x > CANVAS_WIDTH) {
+      this.spaceship.position.x = 0;
+    }
+    if (this.spaceship.position.y > CANVAS_HEIGHT) {
+      this.spaceship.position.y = 0;
+    }
+
     this.context.save();
-    this.drawSpacebody(this.spaceship, true);
+    if (this.shipImgEl) {
+      this.context.translate(this.spaceship.position.x, this.spaceship.position.y);
+      this.context.rotate(this.spaceship.angle);
+      this.context.drawImage(
+        this.shipImgEl.nativeElement,
+        -this.spaceship.radius / 2, -this.spaceship.radius / 2,
+        this.spaceship.radius, this.spaceship.radius);
+
+    } else {
+      this.drawSpacebody(this.spaceship, true);
+    }
+
     this.drawFlame();
     this.context.restore();
   }
@@ -158,10 +172,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context.beginPath();
     this.context.translate(spacebody.position.x, spacebody.position.y);
     this.context.rotate(spacebody.angle);
-    this.context.rect(spacebody.width * -0.5, spacebody.height * -0.5, spacebody.width, spacebody.height);
+    this.context.arc(spacebody.radius * -0.5, spacebody.radius * -0.5, spacebody.radius, 0, 2 * Math.PI);
     this.context.fillStyle = spacebody.color;
     this.context.fill();
     this.context.closePath();
+
+    this.context.stroke();
+
     if (!isSkipContex) {
       this.context.restore();
     }
@@ -190,10 +207,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private drawFlame() {
     if (this.spaceship.isMove) {
       this.context.beginPath();
-      this.context.moveTo(this.spaceship.width * -0.5, this.spaceship.height * 0.5);
-      this.context.lineTo(this.spaceship.width * 0.5, this.spaceship.height * 0.5);
-      this.context.lineTo(0, this.spaceship.height * 0.5 + Math.random() * 10);
-      this.context.lineTo(this.spaceship.width * -0.5, this.spaceship.height * 0.5);
+      this.context.moveTo(this.spaceship.radius * -0.5, this.spaceship.radius * 0.5);
+      this.context.lineTo(this.spaceship.radius * 0.5, this.spaceship.radius * 0.5);
+      this.context.lineTo(0, this.spaceship.radius * 0.5 + Math.random() * 10);
+      this.context.lineTo(this.spaceship.radius * -0.5, this.spaceship.radius * 0.5);
       this.context.closePath();
       this.context.fillStyle = 'orange';
       this.context.fill();
@@ -240,10 +257,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initSpacesbodies() {
-    this.spacesbodies = [];
+    if (this.level === 1) {
+      this.spacesbodies = [];
+    }
     for (let i = 0; i <= SPACESBODIES; i++) {
       const rotate = Math.random() < 0.5;
-      this.spacesbodies.push(new SpacesbodyModel({
+      const body = new SpacesbodyModel({
         position: {
           x: Math.round(Math.random() * CANVAS_WIDTH),
           y: Math.round(Math.random() * CANVAS_HEIGHT)
@@ -254,15 +273,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         isMove: Math.random() > 0.1,
         isRotatingLeft: rotate,
         isRotatingRight: !rotate
-      }));
+      });
+      if (!this.spaceship.isHitWith(body)) {
+        this.spacesbodies.push(body);
+      }
     }
   }
 
   private initEnemies() {
-    this.enemies = [];
+    if (this.level === 1) {
+      this.enemies = [];
+    }
     for (let i = 0; i <= ENEMIES; i++) {
       const rotate = Math.random() < 0.5;
-      this.enemies.push(new EnemyModel({
+      const body = new EnemyModel({
         position: {
           x: Math.round(Math.random() * CANVAS_WIDTH),
           y: Math.round(Math.random() * CANVAS_HEIGHT)
@@ -272,7 +296,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         isMove: Math.random() > 0.1,
         isRotatingLeft: rotate,
         isRotatingRight: !rotate
-      }));
+      });
+      if (!this.spaceship.isHitWith(body)) {
+        this.enemies.push(body);
+      }
     }
   }
 
@@ -285,7 +312,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private fire() {
-    if (this.spaceship.isFire) {
+    this.spaceship.fire();
+    if (this.spaceship.isFireble()) {
+      this.spaceship.fireReload();
       this.bullets.push(new SpacesbodyModel({
         position: {
           x: this.spaceship.position.x,
@@ -331,36 +360,38 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private updateSpacesshipByLevel(level: number) {
     switch (level) {
       case 5:
-        this.spaceship.speed = 12;
-        this.spaceship.width = 8;
-        this.spaceship.height = 8;
-        this.spaceship.turnSpeed = Math.PI / 90;
+        this.spaceship.fireReloadMax = 1;
+        this.spaceship.speed = 8;
+        this.spaceship.radius = 48;
+        this.spaceship.turnSpeed = Math.PI / 20;
         break;
       case 4:
-        this.spaceship.speed = 10;
-        this.spaceship.width = 12;
-        this.spaceship.height = 12;
-        this.spaceship.turnSpeed = Math.PI / 100;
+        this.spaceship.fireReloadMax = 5;
+        this.spaceship.speed = 7;
+        this.spaceship.radius = 50;
+        this.spaceship.turnSpeed = Math.PI / 30;
         break;
       case 3:
-        this.spaceship.speed = 8;
-        this.spaceship.width = 16;
-        this.spaceship.height = 16;
-        this.spaceship.turnSpeed = Math.PI / 120;
+        this.spaceship.fireReloadMax = 10;
+        this.spaceship.speed = 6;
+        this.spaceship.radius = 56;
+        this.spaceship.turnSpeed = Math.PI / 40;
         break;
       case 2:
-        this.spaceship.speed = 6;
-        this.spaceship.width = 20;
-        this.spaceship.height = 20;
-        this.spaceship.turnSpeed = Math.PI / 150;
+        this.spaceship.fireReloadMax = 15;
+        this.spaceship.speed = 5;
+        this.spaceship.radius = 60;
+        this.spaceship.turnSpeed = Math.PI / 50;
         break;
       case 1:
+        this.spaceship.fireReloadMax = 20;
         this.spaceship.speed = 4;
-        this.spaceship.width = 24;
-        this.spaceship.height = 24;
-        this.spaceship.turnSpeed = Math.PI / 180;
+        this.spaceship.radius = 64;
+        this.spaceship.turnSpeed = Math.PI / 60;
         break;
     }
+    this.initSpacesbodies();
+    this.initEnemies();
   }
 
 }

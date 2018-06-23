@@ -1,6 +1,7 @@
 .app-root {
   position: relative;
   height: 100%;
+  width: 100%;
 
   .header {
     position: absolute;
@@ -15,13 +16,13 @@
   }
 
   .main {
-    height: 400px;
-    width: 900px;
-    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    margin: 0;
 
     .canvas {
-      margin: 60px auto 0 auto;
-      border: 1px solid #fff;
+      width: 100%;
+      height: 100%;
     }
   }
 
