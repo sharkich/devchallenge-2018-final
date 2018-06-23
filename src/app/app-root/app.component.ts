@@ -3,6 +3,8 @@ import {SpaceshipModel} from '../_shared/models/spaceship.model';
 import {KeysService} from '../_shared/services/keys.service';
 import {SpacesbodyModel} from '../_shared/models/spacesbody.model';
 
+const CANVAS_WIDTH = 900;
+const CANVAS_HEIGHT = 400;
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public canvas: HTMLCanvasElement;
 
+  public score = 0;
+
   public spaceship = new SpaceshipModel({
     position: {x: 40, y: 200}
   });
@@ -26,15 +30,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    const body = new SpacesbodyModel({
-      position: {x: 400, y: 100},
-      speed: 1,
-      angle: Math.PI,
-      color: 'green',
-      isMove: true,
-      isRotatingRight: true
-    });
-    this.spacesbodies.push(body);
+    for (let i = 0; i <= 100; i++) {
+      const rotate = Math.random() < 0.5;
+      this.spacesbodies.push(new SpacesbodyModel({
+        position: {
+          x: Math.round(Math.random() * CANVAS_WIDTH),
+          y: Math.round(Math.random() * CANVAS_HEIGHT)
+        },
+        speed: Math.round(Math.random() * 10),
+        angle: Math.PI * Math.random(),
+        color: 'green',
+        isMove: Math.random() > 0.1,
+        isRotatingLeft: rotate,
+        isRotatingRight: !rotate
+      }));
+    }
 
     this.keyService.$onPressDown.subscribe(this.engineGoBack.bind(this));
     this.keyService.$onPressUp.subscribe(this.engineOn.bind(this));
@@ -49,8 +59,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.canvas = <HTMLCanvasElement>this.canvasEl.nativeElement;
-    this.canvas.width = 900;
-    this.canvas.height = 400;
+    this.canvas.width = CANVAS_WIDTH;
+    this.canvas.height = CANVAS_HEIGHT;
 
     this.context = this.canvas.getContext('2d');
     this.draw();
@@ -60,12 +70,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private draw() {
+    this.checkHits();
+
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.spaceship.draw();
     this.drawSpaceship();
 
     this.spacesbodies.forEach((spacesbody) => {
+      if (spacesbody.isCrashed) {
+        return;
+      }
       spacesbody.draw();
       this.drawSpacebody(spacesbody);
     });
@@ -117,7 +132,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawFlame() {
-    // Draw the flame if engine is on
     if (this.spaceship.isMove) {
       this.context.beginPath();
       this.context.moveTo(this.spaceship.width * -0.5, this.spaceship.height * 0.5);
@@ -128,6 +142,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.context.fillStyle = 'orange';
       this.context.fill();
     }
+  }
+
+  private checkHits() {
+    this.spacesbodies = this.spacesbodies.filter((spacesbody) => {
+      if (this.spaceship.isHitWith(spacesbody)) {
+        this.score++;
+        spacesbody.die();
+        return false;
+      }
+      return true;
+    });
   }
 
 }

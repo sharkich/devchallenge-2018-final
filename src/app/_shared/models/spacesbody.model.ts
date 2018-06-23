@@ -15,6 +15,8 @@ export class SpacesbodyModel {
   public isRotatingLeft: boolean;
   public isRotatingRight: boolean;
 
+  public isCrashed = false;
+
   constructor(data?: any) {
     this.position = new PositionModel(data.position || {x: 0, y: 0});
     this.speed = data.speed || 1;
@@ -59,5 +61,16 @@ export class SpacesbodyModel {
       this.position.x += Math.sin(this.angle) * this.speed;
       this.position.y -= Math.cos(this.angle) * this.speed;
     }
+  }
+
+  public die() {
+    this.isCrashed = true;
+  }
+
+  public isHitWith(body: SpacesbodyModel): boolean {
+    const w = this.position.x - body.position.x;
+    const h = this.position.y - body.position.y;
+    const length = Math.sqrt( w * w + h * h );
+    return length <= Math.max(this.width, this.height) + Math.max(body.width, body.height);
   }
 }
