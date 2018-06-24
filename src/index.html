@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Final 12</title>
   <meta name="description" content="Dev Challenge 2018 Final">
-  <base href="/">
+  <base href="./">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -16,9 +16,9 @@
   <meta name="application-name" content="DevChe12Final">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="DevChe12Final">
-  <link rel="icon" sizes="192x192" href="/assets/icons/icon-192x192.png">
-  <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
-  <meta name="msapplication-TileImage" content="/assets/icons/icon-144x144.png">
+  <link rel="icon" sizes="192x192" href="./assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192x192.png">
+  <meta name="msapplication-TileImage" content="./assets/icons/icon-144x144.png">
   <meta name="msapplication-TileColor" content="#1976d2">
   <meta name="theme-color" content="#1976d2">
 
@@ -36,7 +36,7 @@
   (function () {
     'use strict';
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js', {scope: '/'});
+      navigator.serviceWorker.register('./service-worker.js', {scope: './'});
     }
   })();
 </script>
